@@ -32,7 +32,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "settings")
-public class ApplicationSettings {
+public class Settings {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="setting_id")
@@ -64,6 +64,83 @@ public class ApplicationSettings {
 	
 	@Column(name="last_modified_userid")
 	private Integer lastModifiedUserid;
-	
 
+	public Integer getSettingsId() {
+		return settingsId;
+	}
+
+	public void setSettingsId(Integer settingsId) {
+		this.settingsId = settingsId;
+	}
+
+	public String getSettingName() {
+		return settingName;
+	}
+
+	public void setSettingName(String settingName) {
+		this.settingName = settingName;
+	}
+
+	public String getSettingDescription() {
+		return settingDescription;
+	}
+
+	public void setSettingDescription(String settingDescription) {
+		this.settingDescription = settingDescription;
+	}
+
+	public String getSettingValue() {
+		return settingValue;
+	}
+
+	public void setSettingValue(String settingValue) {
+		this.settingValue = settingValue;
+	}
+
+	public String getEnvironmentMode() {
+		return environmentMode;
+	}
+
+	public void setEnvironmentMode(String environmentMode) {
+		this.environmentMode = environmentMode;
+	}
+
+	public String getEnvironmentOS() {
+		return environmentOS;
+	}
+
+	public void setEnvironmentOS(String environmentOS) {
+		this.environmentOS = environmentOS;
+	}
+
+	public String getLastChangedTimestamp() {
+		return lastChangedTimestamp;
+	}
+
+	public void setLastChangedTimestamp(String lastChangedTimestamp) {
+		this.lastChangedTimestamp = lastChangedTimestamp;
+	}
+
+	public Integer getLastModifiedUserid() {
+		return lastModifiedUserid;
+	}
+
+	public void setLastModifiedUserid(Integer lastModifiedUserid) {
+		this.lastModifiedUserid = lastModifiedUserid;
+	}
+
+	public Settings(Integer settingsId, String settingName, String settingDescription, String settingValue,
+			String environmentMode, String environmentOS, String lastChangedTimestamp, Integer lastModifiedUserid) {
+		this.settingsId = settingsId;
+		this.settingName = settingName;
+		this.settingDescription = settingDescription;
+		this.settingValue = settingValue;
+		this.environmentMode = environmentMode;
+		this.environmentOS = environmentOS;
+		this.lastChangedTimestamp = lastChangedTimestamp;
+		this.lastModifiedUserid = lastModifiedUserid;
+	}
+
+	public Settings() {
+	}
 }

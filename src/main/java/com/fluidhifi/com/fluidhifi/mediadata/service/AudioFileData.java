@@ -536,7 +536,8 @@ public class AudioFileData {
 		this.composer = tag.getFirst(FieldKey.COMPOSER);
 		this.composerSort = tag.getFirst(FieldKey.COMPOSER_SORT);
 		this.conductor = tag.getFirst(FieldKey.CONDUCTOR);
-		this.coverArt = tag.getFirst(FieldKey.COVER_ART);
+		/* TODO: Needs special code to get cover art from flac file */
+		//this.coverArt = tag.getFirst(FieldKey.COVER_ART);
 		this.discNumber = tag.getFirst(FieldKey.DISC_NO);
 		this.discTotal = tag.getFirst(FieldKey.DISC_TOTAL);
 		this.encoder = tag.getFirst(FieldKey.ENCODER);
@@ -577,68 +578,70 @@ public class AudioFileData {
 
 	public void ExtractMP3AudioData(File fileToExtractDataFrom)
 			throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-		AudioFile f = AudioFileIO.read(fileToExtractDataFrom);
-		MP3File tag = (MP3File) f.getTag();
+		MP3File f = (MP3File) AudioFileIO.read(fileToExtractDataFrom);
+		Tag tag =  f.getTag();
+		
 
-		if (tag.hasID3v2Tag()) {
+		if (f.hasID3v2Tag()) {
+			System.out.println("inside hasID3v2Tag");
 			AbstractID3v2Tag v2tag = (AbstractID3v2Tag) f.getTag();
 
 			this.album = v2tag.getFirst(ID3v24Frames.FRAME_ID_ALBUM);
-			this.albumArtist = v2tag.getFirst(ID3v24Frames.FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES);
-			this.albumArtistSort = v2tag.getFirst(ID3v24Frames.ALBUM_ARTIST_SORT);
-			this.albumSort = v2tag.getFirst(ID3v24Frames.ALBUM_SORT);
-			this.amazonId = v2tag.getFirst(ID3v24Frames.AMAZON_ID);
-			this.artist = v2tag.getFirst(ID3v24Frames.ARTIST);
-			this.artistSort = v2tag.getFirst(ID3v24Frames.ARTIST_SORT);
-			this.barcode = v2tag.getFirst(ID3v24Frames.BARCODE);
-			this.bpm = v2tag.getFirst(ID3v24Frames.BPM);
-			this.catalogueNumber = v2tag.getFirst(ID3v24Frames.CATALOG_NO);
-			this.comment = v2tag.getFirst(ID3v24Frames.COMMENT);
-			this.composer = v2tag.getFirst(ID3v24Frames.COMPOSER);
-			this.composerSort = v2tag.getFirst(ID3v24Frames.COMPOSER_SORT);
-			this.conductor = v2tag.getFirst(ID3v24Frames.CONDUCTOR);
-			this.coverArt = v2tag.getFirst(ID3v24Frames.COVER_ART);
-			this.discNumber = v2tag.getFirst(ID3v24Frames.DISC_NO);
-			this.discTotal = v2tag.getFirst(ID3v24Frames.DISC_TOTAL);
-			this.encoder = v2tag.getFirst(ID3v24Frames.ENCODER);
-			this.genre = v2tag.getFirst(ID3v24Frames.GENRE);
-			this.grouping = v2tag.getFirst(ID3v24Frames.GROUPING);
-			this.isCompilation = v2tag.getFirst(ID3v24Frames.IS_COMPILATION);
-			this.isrc = v2tag.getFirst(ID3v24Frames.ISRC);
-			this.key = v2tag.getFirst(ID3v24Frames.KEY);
-			this.language = v2tag.getFirst(ID3v24Frames.LANGUAGE);
-			this.lyrcist = v2tag.getFirst(ID3v24Frames.LYRICIST);
-			this.lyrics = v2tag.getFirst(ID3v24Frames.LYRICS);
-			this.media = v2tag.getFirst(ID3v24Frames.MEDIA);
-			this.mood = v2tag.getFirst(ID3v24Frames.MOOD);
-			this.musicBrainzArtistId = v2tag.getFirst(ID3v24Frames.MUSICBRAINZ_ARTISTID);
+			this.albumArtist = v2tag.getFirst(ID3v24Frames.FRAME_ID_ARTIST);
+			this.albumArtistSort = v2tag.getFirst(ID3v24Frames.FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES);
+			this.albumSort = v2tag.getFirst(ID3v24Frames.FRAME_ID_ALBUM_SORT_ORDER);
+			this.amazonId = v2tag.getFirst(ID3v24Frames.FRAME_ID_MUSIC_CD_ID);
+			this.artist = v2tag.getFirst(ID3v24Frames.FRAME_ID_ARTIST);
+			this.artistSort = v2tag.getFirst(ID3v24Frames.FRAME_ID_ARTIST_SORT_ORDER);
+			this.barcode = v2tag.getFirst(ID3v24Frames.FRAME_ID_MUSIC_CD_ID);
+			this.bpm = v2tag.getFirst(ID3v24Frames.FRAME_ID_BPM);
+			//this.catalogueNumber = v2tag.getFirst(ID3v24Frames.CATALOG_NO);
+			this.comment = v2tag.getFirst(ID3v24Frames.FRAME_ID_COMMENT);
+			this.composer = v2tag.getFirst(ID3v24Frames.FRAME_ID_COMPOSER);
+			this.composerSort = v2tag.getFirst(ID3v24Frames.FRAME_ID_COMPOSER);
+			this.conductor = v2tag.getFirst(ID3v24Frames.FRAME_ID_CONDUCTOR);
+			this.coverArt = v2tag.getFirst(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE);
+			//this.discNumber = v2tag.getFirst(ID3v24Frames.DISC_NO);
+			//this.discTotal = v2tag.getFirst(ID3v24Frames.);
+			this.encoder = v2tag.getFirst(ID3v24Frames.FRAME_ID_ENCODEDBY);
+			this.genre = v2tag.getFirst(ID3v24Frames.FRAME_ID_GENRE);
+			this.grouping = v2tag.getFirst(ID3v24Frames.FRAME_ID_GROUP_ID_REG);
+			this.isCompilation = v2tag.getFirst(ID3v24Frames.FRAME_ID_IS_COMPILATION);
+			this.isrc = v2tag.getFirst(ID3v24Frames.FRAME_ID_ISRC);
+			//this.key = v2tag.getFirst(ID3v24Frames.KEY);
+			this.language = v2tag.getFirst(ID3v24Frames.FRAME_ID_LANGUAGE);
+			this.lyrcist = v2tag.getFirst(ID3v24Frames.FRAME_ID_LYRICIST);
+			//this.lyrics = v2tag.getFirst(ID3v24Frames.LYRICS);
+			this.media = v2tag.getFirst(ID3v24Frames.FRAME_ID_MEDIA_TYPE);
+			this.mood = v2tag.getFirst(ID3v24Frames.FRAME_ID_MOOD);
+			/*this.musicBrainzArtistId = v2tag.getFirst(ID3v24Frames);
 			this.musicBrainzDiscId = v2tag.getFirst(ID3v24Frames.MUSICBRAINZ_DISC_ID);
 			this.musicBrainzReleaseCountry = v2tag.getFirst(ID3v24Frames.MUSICBRAINZ_RELEASE_COUNTRY);
 			this.musicBrainzReleaseStatus = v2tag.getFirst(ID3v24Frames.MUSICBRAINZ_RELEASE_STATUS);
 			this.musicBrainzReleaseType = v2tag.getFirst(ID3v24Frames.MUSICBRAINZ_RELEASE_TYPE);
 			this.musicBrainzReleaseArtistId = v2tag.getFirst(ID3v24Frames.MUSICBRAINZ_RELEASEARTISTID);
 			this.musicBrainzReleaseId = v2tag.getFirst(ID3v24Frames.MUSICBRAINZ_RELEASEID);
-			this.musicBrainzTrackId = v2tag.getFirst(ID3v24Frames.MUSICBRAINZ_TRACK_ID);
-			this.musicIpId = v2tag.getFirst(ID3v24Frames.MUSICIP_ID);
-			this.recordLabel = v2tag.getFirst(ID3v24Frames.RECORD_LABEL);
-			this.remixer = v2tag.getFirst(ID3v24Frames.REMIXER);
-			this.title = v2tag.getFirst(ID3v24Frames.TITLE);
-			this.titleSort = v2tag.getFirst(ID3v24Frames.TITLE_SORT);
-			this.track = v2tag.getFirst(ID3v24Frames.TRACK);
-			this.trackTotal = v2tag.getFirst(ID3v24Frames.TRACK_TOTAL);
-			this.urlDiscogsArtistSite = v2tag.getFirst(ID3v24Frames.URL_DISCOGS_ARTIST_SITE);
-			this.urlDiscogsReleaseSite = v2tag.getFirst(ID3v24Frames.URL_DISCOGS_RELEASE_SITE);
-			this.urlLyricsSite = v2tag.getFirst(ID3v24Frames.URL_LYRICS_SITE);
-			this.urlOfficialArtistSite = v2tag.getFirst(ID3v24Frames.URL_OFFICIAL_ARTIST_SITE);
-			this.urlOfficialReleaseSite = v2tag.getFirst(ID3v24Frames.URL_OFFICIAL_RELEASE_SITE);
-			this.urlWikipediaArtistSite = v2tag.getFirst(ID3v24Frames.URL_WIKIPEDIA_ARTIST_SITE);
-			this.urlWikipediaReleaseSite = v2tag.getFirst(ID3v24Frames.URL_WIKIPEDIA_RELEASE_SITE);
-			this.year = v2tag.getFirst(ID3v24Frames.YEAR);
+			this.musicBrainzTrackId = v2tag.getFirst(ID3v24Frames.MUSICBRAINZ_TRACK_ID);*/
+			//this.musicIpId = v2tag.getFirst(ID3v24Frames.music);
+			//this.recordLabel = v2tag.getFirst(ID3v24Frames.);
+			this.remixer = v2tag.getFirst(ID3v24Frames.FRAME_ID_REMIXED);
+			this.title = v2tag.getFirst(ID3v24Frames.FRAME_ID_TITLE);
+			this.titleSort = v2tag.getFirst(ID3v24Frames.FRAME_ID_TITLE_SORT_ORDER);
+			this.track = v2tag.getFirst(ID3v24Frames.FRAME_ID_TRACK);
+			//this.trackTotal = v2tag.getFirst(ID3v24Frames.);
+			this.urlDiscogsArtistSite = v2tag.getFirst(ID3v24Frames.FRAME_ID_URL_ARTIST_WEB);
+			this.urlDiscogsReleaseSite = v2tag.getFirst(ID3v24Frames.FRAME_ID_URL_SOURCE_WEB);
+			//this.urlLyricsSite = v2tag.getFirst(ID3v24Frames.url);
+			this.urlOfficialArtistSite = v2tag.getFirst(ID3v24Frames.FRAME_ID_URL_ARTIST_WEB);
+			//this.urlOfficialReleaseSite = v2tag.getFirst(ID3v24Frames.URL_OFFICIAL_RELEASE_SITE);
+			//this.urlWikipediaArtistSite = v2tag.getFirst(ID3v24Frames.);
+			//this.urlWikipediaReleaseSite = v2tag.getFirst(ID3v24Frames.URL_WIKIPEDIA_RELEASE_SITE);
+			this.year = v2tag.getFirst(ID3v24Frames.FRAME_ID_YEAR);
 
 			return;
 		}
 
-		if (tag.hasID3v1Tag()) {
+		if (f.hasID3v1Tag()) {
 			ID3v1Tag v1Tag = (ID3v1Tag)f.getTag();
 
 			this.album = v1Tag.getFirst(FieldKey.ALBUM);
@@ -841,25 +844,25 @@ public class AudioFileData {
 
 	@Override
 	public String toString() {
-		return "AudioFileData [artist=" + artist + ", title=" + title + ", track=" + track + ", trackTotal="
-				+ trackTotal + ", genre=" + genre + ", album=" + album + ", albumArtist=" + albumArtist + ", composer="
-				+ composer + ", year=" + year + ", recordLabel=" + recordLabel + ", lyrcist=" + lyrcist + ", language="
-				+ language + ", key=" + key + ", conductor=" + conductor + ", remixer=" + remixer + ", mood=" + mood
-				+ ", media=" + media + ", comment=" + comment + ", grouping=" + grouping + ", discNumber=" + discNumber
-				+ ", discTotal=" + discTotal + ", coverArt=" + coverArt + ", bpm=" + bpm + ", lyrics=" + lyrics
-				+ ", isCompilation=" + isCompilation + ", encoder=" + encoder + ", isrc=" + isrc + ", barcode="
-				+ barcode + ", catalogueNumber=" + catalogueNumber + ", amazonId=" + amazonId + ", musicBrainzArtistId="
-				+ musicBrainzArtistId + ", musicBrainzDiscId=" + musicBrainzDiscId + ", musicBrainzReleaseCountry="
-				+ musicBrainzReleaseCountry + ", musicBrainzReleaseStatus=" + musicBrainzReleaseStatus
-				+ ", musicBrainzReleaseType=" + musicBrainzReleaseType + ", musicBrainzReleaseArtistId="
-				+ musicBrainzReleaseArtistId + ", musicBrainzReleaseId=" + musicBrainzReleaseId
-				+ ", musicBrainzTrackId=" + musicBrainzTrackId + ", musicIpId=" + musicIpId + ", titleSort=" + titleSort
-				+ ", artistSort=" + artistSort + ", albumSort=" + albumSort + ", albumArtistSort=" + albumArtistSort
-				+ ", composerSort=" + composerSort + ", urlDiscogsArtistSite=" + urlDiscogsArtistSite
-				+ ", urlDiscogsReleaseSite=" + urlDiscogsReleaseSite + ", urlLyricsSite=" + urlLyricsSite
-				+ ", urlOfficialArtistSite=" + urlOfficialArtistSite + ", urlOfficialReleaseSite="
-				+ urlOfficialReleaseSite + ", urlWikipediaReleaseSite=" + urlWikipediaReleaseSite
-				+ ", urlWikipediaArtistSite=" + urlWikipediaArtistSite + "]";
+		return "AudioFileData - [artist=" + artist + ",\n title=" + title + ",\n track=" + track + ",\n trackTotal="
+				+ trackTotal + ",\n genre=" + genre + ",\n album=" + album + ",\n albumArtist=" + albumArtist + ",\n composer="
+				+ composer + ",\n year=" + year + ",\n recordLabel=" + recordLabel + ",\n lyrcist=" + lyrcist + ",\n language="
+				+ language + ",\n key=" + key + ",\n conductor=" + conductor + ",\n remixer=" + remixer + ",\n mood=" + mood
+				+ ",\n media=" + media + ",\n comment=" + comment + ",\n grouping=" + grouping + ",\n discNumber=" + discNumber
+				+ ",\n discTotal=" + discTotal + ",\n coverArt=" + coverArt + ",\n bpm=" + bpm + ",\n lyrics=" + lyrics
+				+ ",\n isCompilation=" + isCompilation + ",\n encoder=" + encoder + ",\n isrc=" + isrc + ",\n barcode="
+				+ barcode + ",\n catalogueNumber=" + catalogueNumber + ",\n amazonId=" + amazonId + ",\n musicBrainzArtistId="
+				+ musicBrainzArtistId + ",\n musicBrainzDiscId=" + musicBrainzDiscId + ",\n musicBrainzReleaseCountry="
+				+ musicBrainzReleaseCountry + ",\n musicBrainzReleaseStatus=" + musicBrainzReleaseStatus
+				+ ",\n musicBrainzReleaseType=" + musicBrainzReleaseType + ",\n musicBrainzReleaseArtistId="
+				+ musicBrainzReleaseArtistId + ",\n musicBrainzReleaseId=" + musicBrainzReleaseId
+				+ ",\n musicBrainzTrackId=" + musicBrainzTrackId + ",\n musicIpId=" + musicIpId + ",\n titleSort=" + titleSort
+				+ ",\n artistSort=" + artistSort + ",\n albumSort=" + albumSort + ",\n albumArtistSort=" + albumArtistSort
+				+ ",\n composerSort=" + composerSort + ",\n urlDiscogsArtistSite=" + urlDiscogsArtistSite
+				+ ",\n urlDiscogsReleaseSite=" + urlDiscogsReleaseSite + ",\n urlLyricsSite=" + urlLyricsSite
+				+ ",\n urlOfficialArtistSite=" + urlOfficialArtistSite + ",\n urlOfficialReleaseSite="
+				+ urlOfficialReleaseSite + ",\n urlWikipediaReleaseSite=" + urlWikipediaReleaseSite
+				+ ",\n urlWikipediaArtistSite=" + urlWikipediaArtistSite + "]";
 	}
 
 	public LibraryAudio InsertIntoAudioFile() {

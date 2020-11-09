@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.logging.Log;
@@ -24,7 +23,7 @@ public class Application implements CommandLineRunner {
 	protected final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
-	private ApplicationSettingsRepository applicationSettingsRepository;
+	private SettingsRepository settingsRepository;
 	@Autowired
 	private LibraryRepository libraryRepository;
 	@Autowired
@@ -36,6 +35,8 @@ public class Application implements CommandLineRunner {
 	@Autowired
 	private SupportedFileTypeRepository supportedFileTypeRepository;
 
+	private String me = "fluidhifi.mediadata.service";
+	private List<Settings> settings = new ArrayList<Settings>();
 	private List<LibraryDirectory> musicDirectories = new ArrayList<LibraryDirectory>();
 	private List<LibraryDirectory> audioBookDirectories = new ArrayList<LibraryDirectory>();
 	private List<LibraryDirectory> movieDirectories = new ArrayList<LibraryDirectory>();
@@ -53,23 +54,54 @@ public class Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		logger.info("Fluid-Hifi data management service started successfully.");
+		
+		logger.info("Retreiving Operating System...");
 		retrieveOperatingSystem();
-		System.out.println(this.operatingSystem);
+		displayOperatingSystem();
+		logger.info("Done.");
+		
+		logger.info("Retrieving Application Settings...");
+		retrieveApplicationSettings();
+		displayApplicationSettings();
+		logger.info("Done.");
+		
+		logger.info("Retrieiving Libraries...");
 		retrieveLibraries();
 		displayLibraries();
+		logger.info("Done.");
+		
+		logger.info("Retrieiving Media Categories...");
 		retrieveMediaCategories();
 		displayMediaCategories();
+		logger.info("Done.");
+		
 		retrieveMusicDirectories();
+		
+		logger.info("Retrieving Supported Audio File Types...");
 		retrieveSupportedAudioFileTypes();
 		displaySupportedAudioFileTypes();
+		logger.info("Done.");
 		// displayMusicDirectories();
 		readAudioDirectories();
+	}
+
+	private void displayApplicationSettings() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void retrieveApplicationSettings() {
+		this.settings = this.settingsRepository.findByApplicationNameAndOS(this.me, this.operatingSystem);
 	}
 
 	// #1
 	/* need to know the platform to filter the settings out on */
 	public void retrieveOperatingSystem() {
 		this.operatingSystem = SystemUtils.OS_NAME;
+	}
+	
+	public void displayOperatingSystem() {
+		logger.info(this.operatingSystem);
 	}
 
 	// #2
@@ -151,24 +183,6 @@ public class Application implements CommandLineRunner {
 				}
 			}
 		}
-
-		/* collect the directories */
-		/*
-		 * LibraryDirectories libraryDirectories = new LibraryDirectories(); for (int i
-		 * = 0; i < musicLibraries.size(); i++) { List<LibraryDirectory> tempDirectories
-		 * = libraryDirectoryRepository.findAllByLibraryId(musicLibraries.get(i).
-		 * getLibraryId()); if (!tempDirectories.isEmpty()) {
-		 * libraryDirectories.addAll(tempDirectories); } }
-		 */
-
-		/* insert directories collected */
-		/*
-		 * if(!libraryDirectories.getLibraryDirectories().isEmpty()) {
-		 * 
-		 * for (int i = 0; i < libraryDirectories.getLibraryDirectories().size(); i++) {
-		 * this.musicDirectories.add(libraryDirectories.getLibraryDirectories().get(i));
-		 * System.out.println(libraryDirectories.getLibraryDirectories().get(i)); } }
-		 */
 	}
 
 	public void displayMusicDirectories() {
@@ -176,17 +190,6 @@ public class Application implements CommandLineRunner {
 			System.out.println(this.musicDirectories.get(i));
 		}
 	}
-
-	/*
-	 * public void retrieveScanDirectories() { this.musicDirectories =
-	 * applicationSettingsRepository.findByApplicationSettingName(
-	 * "AudioScanDirectory"); this.audioBookDirectories =
-	 * libraryDirectoryRepository.find this.movieDirectories =
-	 * applicationSettingsRepository.findByApplicationSettingName(
-	 * "MovieScanDirectory"); this.tvDirectories =
-	 * applicationSettingsRepository.findByApplicationSettingName("TVScanDirectory")
-	 * ; }
-	 */
 
 	// #3 (optional for now)
 	/* get all media scan intervals */
@@ -231,7 +234,7 @@ public class Application implements CommandLineRunner {
 							/* extract ID3 Data */
 							AudioFileData audioFileData = new AudioFileData();
 							audioFileData.ExtractAudioData(f);
-							System.out.println(audioFileData.toString());
+							System.out.println("Checking file support ... " + audioFileData.toString());
 
 							/* put extracted data into audio object */
 							LibraryAudio audio = new LibraryAudio();
@@ -242,7 +245,7 @@ public class Application implements CommandLineRunner {
 							audio.setFilePath(f.getPath());
 
 							/* save to database */
-							// libraryAudioRepository.save(audio);
+							libraryAudioRepository.save(audio);
 						}
 					//}
 					readAudioDirectory(f.toString());
@@ -269,5 +272,4 @@ public class Application implements CommandLineRunner {
 			}
 		}
 	}
-
 }

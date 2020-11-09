@@ -24,6 +24,8 @@
 
 package com.fluidhifi.com.fluidhifi.mediadata.service;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
@@ -32,4 +34,5 @@ public interface ApplicationSettingsRepository extends JpaRepository<Application
 	Iterable<ApplicationSettings> findByApplicationName(String applicationname);
 	ApplicationSettings[] findByApplicationSettingName(String applicationsettingname);
 	ApplicationSettings findByApplicationSettingsId(Integer applicationsettingsid);
+	List<ApplicationSettings> findByApplicationNameAndOS(String me, String operatingSystem);
 }

@@ -21,49 +21,18 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
+
 package com.fluidhifi.com.fluidhifi.mediadata.service;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.List;
 
-@Entity
-@Table(name = "settings")
-public class ApplicationSettings {
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="setting_id")
-	private Integer settingsId; 
-	
-	/*@Column(name="application_setting_type")
-	private String applicationSettingType;
-	
-	@Column(name="application_name")
-	private String applicationName;*/
-	
-	@Column(name="setting_name")
-	private String settingName;
-	
-	@Column(name="setting_description")
-	private String settingDescription; 
-	
-	@Column(name="setting_value")
-	private String settingValue;
-	
-	@Column(name="environment_mode")
-	private String environmentMode;
-	
-	@Column(name="environment_os")
-	private String environmentOS;
-	
-	 @Column(name="last_changed_timestamp")
-	private String lastChangedTimestamp;
-	
-	@Column(name="last_modified_userid")
-	private Integer lastModifiedUserid;
-	
+import org.springframework.data.jpa.repository.JpaRepository;
 
+
+public interface SettingsRepository extends JpaRepository<Settings, Integer>{
+
+	Iterable<Settings> findByApplicationName(String applicationname);
+	Settings[] findByApplicationSettingName(String applicationsettingname);
+	Settings findByApplicationSettingsId(Integer applicationsettingsid);
+	List<Settings> findByApplicationNameAndOS(String me, String operatingSystem);
 }
